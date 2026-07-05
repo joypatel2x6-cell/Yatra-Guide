@@ -1,0 +1,8 @@
+{
+  "name": "yatra-guide",
+  "version": "1.0.0",
+  "description": "Yatra Guide — Your Indian Travel Companion",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}
