@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatra Guide — Your Indian Travel Companion</title>
+    <meta name="description" content="Plan routes, discover cities, compare travel costs across India — no external APIs needed.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+     <link rel="stylesheet" href="css/style.css?v=24">
+     <link rel="stylesheet" href="css/pages_redesign.css?v=5">
+</head>
+<body class="custom-cursor-enabled">
+
+    <!-- Custom Cursor Follower -->
+    <div id="custom-cursor-dot"></div>
+    <div id="custom-cursor-ring-1"></div>
+    <div id="custom-cursor-ring-2"></div>
+
+    <!-- ── Splash Screen ── -->
+    <div class="splash-screen" id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="url(#splash-grad)" stroke-width="2.5" stroke-dasharray="4 2"/>
+                    <path d="M12 4 L14.5 10.5 L21 12 L14.5 13.5 L12 20 L9.5 13.5 L3 12 L9.5 10.5 Z" fill="url(#splash-grad)"/>
+                    <circle cx="12" cy="12" r="2" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="splash-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#F97316"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="splash-title">Yatra Guide</div>
+            <div class="splash-subtitle">Your Indian Travel Companion</div>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ambient background orbs -->
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+
+    <!-- ── Navbar ── -->
+    <nav class="navbar" id="main-navbar">
+        <div class="logo" style="display: flex; align-items: center; gap: 0.6rem;">
+            <div class="logo-icon" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="2.5" stroke-dasharray="4 2"/>
+                    <path d="M12 4 L14.5 10.5 L21 12 L14.5 13.5 L12 20 L9.5 13.5 L3 12 L9.5 10.5 Z" fill="#fff"/>
+                    <circle cx="12" cy="12" r="2" fill="#fff"/>
+                </svg>
+            </div>
+            <div class="logo-wordmark">
+                <span class="logo-yatra">Yatra</span><span class="logo-guide">Guide</span>
+            </div>
+        </div>
+
+        <ul class="nav-center" id="nav-links">
+            <li><a href="#" data-route="home" class="active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a></li>
+            <li><a href="#" data-route="planner">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="#" data-route="explorer">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>Explorer</span>
+            </a></li>
+            <li><a href="#" data-route="saved">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2" /><path d="M8 8V5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v3" /><path d="M12 11l1 2h2l-1.5 1.2L14 16l-2-1.3-2 1.3.5-1.8-1.5-1.2h2z" fill="currentColor" /></svg>
+                <span>Saved Trips</span>
+            </a></li>
+            <li><a href="#" data-route="aihub">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>AI Hub</span>
+            </a></li>
+            <li><a href="#" data-route="emergency">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <span>Emergency</span>
+            </a></li>
+            <li><a href="#" data-route="about">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>About</span>
+            </a></li>
+            <li><a href="#" data-route="feedback">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>Feedback</span>
+            </a></li>
+            <!-- Show Account on mobile where nav-actions are hidden -->
+            <li class="mobile-only-nav"><a href="#" data-route="login">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Account</span>
+            </a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <!-- Dynamically populated by JS (Theme Toggle + Auth) -->
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- ── Main SPA Container ── -->
+    <main id="app-container"></main>
+
+    <!-- ── Footer ── -->
+    <footer>
+        <p>© 2026 Yatra Guide &mdash; Built with ❤️ for India. No external APIs. All calculations are local.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="data/india_states.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/app.bundle.js?v=21"></script>
+
+    <!-- ══ Yatra AI Chat Widget ══ -->
+    <div id="yatra-chat-fab" role="button" aria-label="Open AI Travel Assistant" tabindex="0">
+        <!-- Chat icon -->
+        <svg class="fab-icon-chat" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="13" y2="14"/>
+        </svg>
+        <!-- Close icon -->
+        <svg class="fab-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        <div class="fab-badge" id="chat-badge">1</div>
+    </div>
+
+    <div id="yatra-chat-window" role="dialog" aria-label="Yatra AI Assistant">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-avatar">🗺️</div>
+            <div class="chat-header-info">
+                <div class="chat-header-name">Yatra AI</div>
+                <div class="chat-header-status">
+                    <div class="chat-status-dot"></div>
+                    <span>Always online · India Travel Expert</span>
+                </div>
+            </div>
+            <div class="chat-header-actions">
+                <button class="chat-header-btn" id="chat-clear-btn" title="Clear chat">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                </button>
+                <button class="chat-header-btn" id="chat-close-btn" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick suggestion chips -->
+        <div class="chat-suggestions" id="chat-chips">
+            <button class="chat-chip">🏙️ Best cities to visit</button>
+            <button class="chat-chip">🌧️ Monsoon travel tips</button>
+            <button class="chat-chip">🚂 Train booking guide</button>
+            <button class="chat-chip">🍛 Best street food</button>
+            <button class="chat-chip">🏔️ Hill stations</button>
+            <button class="chat-chip">💰 Budget travel</button>
+            <button class="chat-chip">🛕 Spiritual destinations</button>
+            <button class="chat-chip">🏖️ Beach getaways</button>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-welcome">
+                <div class="chat-welcome-emoji">🇮🇳</div>
+                <h4>Namaste! I'm Yatra AI</h4>
+                <p>Your personal India travel expert. Ask me anything about destinations, food, transport, culture, or travel tips!</p>
+            </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+            <textarea id="yatra-chat-input" placeholder="Ask about any place in India…" rows="1" maxlength="500"></textarea>
+            <button id="yatra-chat-send" aria-label="Send message">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // ════════════════════════════════════════════════
+    //  YATRA AI CHAT ENGINE  —  Secure Backend Integration
+    // ════════════════════════════════════════════════
+    (function() {
+        const BACKEND_URL = 'http://localhost:5000/api/chat';
+
+        // ── DOM refs ───────────────────────────────
+        const fab        = document.getElementById('yatra-chat-fab');
+        const win        = document.getElementById('yatra-chat-window');
+        const msgs       = document.getElementById('chat-messages');
+        const input      = document.getElementById('yatra-chat-input');
+        const sendBtn    = document.getElementById('yatra-chat-send');
+        const closeBtn   = document.getElementById('chat-close-btn');
+        const clearBtn   = document.getElementById('chat-clear-btn');
+        const badge      = document.getElementById('chat-badge');
+        const chipsEl    = document.getElementById('chat-chips');
+
+        let isOpen = false;
+        let isTyping = false;
+        let chatHistory = []; // Format: { role: 'user'|'model', text: '...' }
+
+        // Initialize Chat History from LocalStorage
+        function initHistory() {
+            try {
+                const stored = localStorage.getItem('yg_chat_history');
+                if (stored) {
+                    chatHistory = JSON.parse(stored);
+                    if (chatHistory.length > 0) {
+                        // Clear the welcome message if there is history
+                        msgs.innerHTML = '';
+                        chatHistory.forEach(item => {
+                            appendMsg(item.text, item.role === 'user' ? 'user' : 'bot', false);
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load chat history from LocalStorage:', e);
+            }
+        }
+
+        // Save Chat History to LocalStorage
+        function saveHistory() {
+            try {
+                // Keep only the last 30 messages to avoid bloating LocalStorage
+                const limit = 30;
+                const slice = chatHistory.slice(-limit);
+                localStorage.setItem('yg_chat_history', JSON.stringify(slice));
+            } catch (e) {
+                console.error('Failed to save chat history to LocalStorage:', e);
+            }
+        }
+
+        // ── Toggle open/close ──────────────────────
+        function toggleChat() {
+            isOpen = !isOpen;
+            fab.classList.toggle('open', isOpen);
+            win.classList.toggle('open', isOpen);
+            badge.classList.add('hidden');
+            if (isOpen) { input.focus(); scrollBottom(); }
+        }
+
+        fab.addEventListener('click', toggleChat);
+        fab.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleChat(); } });
+        closeBtn.addEventListener('click', toggleChat);
+
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear the conversation history?')) {
+                chatHistory = [];
+                localStorage.removeItem('yg_chat_history');
+                msgs.innerHTML = `
+                    <div class="chat-welcome">
+                        <div class="chat-welcome-emoji">🇮🇳</div>
+                        <h4>Namaste! I'm Yatra AI</h4>
+                        <p>Your personal India travel expert. Ask me anything about destinations, food, transport, culture, or travel tips!</p>
+                    </div>`;
+            }
+        });
+
+        // ── Chips ──────────────────────────────────
+        chipsEl.querySelectorAll('.chat-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const text = chip.textContent.replace(/^[^\w]+/, '').trim();
+                sendMessage(text);
+            });
+        });
+
+        // ── Helpers ────────────────────────────────
+        function getTime() {
+            return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+        function scrollBottom() {
+            setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 50);
+        }
+
+        function appendMsg(text, role, save = true) {
+            const isBot = role === 'bot';
+            const div = document.createElement('div');
+            div.className = `chat-msg ${role}`;
+            
+            // Format bot text as Markdown if marked library is loaded
+            let renderedText = text;
+            if (isBot && typeof marked !== 'undefined') {
+                renderedText = marked.parse(text);
+            } else if (!isBot) {
+                // Escape HTML for user input safety
+                renderedText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+
+            // Copy button for bot response
+            const copyBtnHTML = isBot ? `
+                <button class="chat-copy-btn" title="Copy response">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                </button>
+            ` : '';
+
+            div.innerHTML = `
+                <div class="chat-msg-avatar">${isBot ? '🗺️' : '👤'}</div>
+                <div style="display:flex; flex-direction:column; ${!isBot ? 'align-items:flex-end;' : 'align-items:flex-start;'} position:relative; max-width: 80%;">
+                    <div class="chat-msg-bubble">${renderedText} ${copyBtnHTML}</div>
+                    <div class="chat-msg-time">${getTime()}</div>
+                </div>`;
+
+            msgs.appendChild(div);
+            scrollBottom();
+
+            // Set up copy button event listener
+            if (isBot) {
+                const btn = div.querySelector('.chat-copy-btn');
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        // Extract plain text from markdown-rendered element
+                        const plainText = div.querySelector('.chat-msg-bubble').innerText.replace(/\s*Copy response\s*$/, '').trim();
+                        navigator.clipboard.writeText(plainText).then(() => {
+                            btn.classList.add('copied');
+                            btn.setAttribute('title', 'Copied!');
+                            btn.innerHTML = `
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            `;
+                            setTimeout(() => {
+                                btn.classList.remove('copied');
+                                btn.setAttribute('title', 'Copy response');
+                                btn.innerHTML = `
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                    </svg>
+                                `;
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('Failed to copy text:', err);
+                        });
+                    });
+                }
+            }
+
+            if (save) {
+                chatHistory.push({ role: isBot ? 'model' : 'user', text: text });
+                saveHistory();
+            }
+        }
+
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'chat-typing';
+            div.id = 'chat-typing-indicator';
+            div.innerHTML = `
+                <div class="chat-msg-avatar">🗺️</div>
+                <div class="chat-typing-bubble">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>`;
+            msgs.appendChild(div);
+            scrollBottom();
+        }
+
+        function removeTyping() {
+            const el = document.getElementById('chat-typing-indicator');
+            if (el) el.remove();
+        }
+
+        async function sendMessage(text) {
+            if (!text || isTyping) return;
+            const trimmed = text.trim();
+            if (!trimmed) return;
+
+            // Remove welcome page if it is still visible
+            const welcome = msgs.querySelector('.chat-welcome');
+            if (welcome) welcome.remove();
+
+            appendMsg(trimmed, 'user');
+            input.value = '';
+            input.style.height = '42px';
+            sendBtn.disabled = true;
+            isTyping = true;
+
+            showTyping();
+
+            try {
+                // Call secure backend endpoint
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: trimmed,
+                        history: chatHistory.slice(0, -1) // Send all history except the one we just added
+                    })
+                });
+
+                removeTyping();
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                appendMsg(data.reply, 'bot');
+
+            } catch (err) {
+                console.error('Chat error:', err);
+                removeTyping();
+                appendMsg(`⚠️ **Sorry, I encountered an issue:** ${err.message || 'Could not reach the server'}. Please check if the backend server is running.`, 'bot');
+            } finally {
+                isTyping = false;
+                sendBtn.disabled = false;
+                input.focus();
+            }
+        }
+
+        // ── Send handlers ──────────────────────────
+        sendBtn.addEventListener('click', () => sendMessage(input.value));
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(input.value);
+            }
+        });
+
+        // Auto-resize textarea
+        input.addEventListener('input', () => {
+            input.style.height = '42px';
+            input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+            sendBtn.disabled = !input.value.trim();
+        });
+
+        // Initialize state
+        sendBtn.disabled = true;
+        initHistory();
+    })();
+    </script>
+
+</body>
+</html>
