@@ -5,7 +5,7 @@
 
 // ── THEME INITIALIZATION ─────────────────────────────
 (function initTheme() {
-    var savedTheme = localStorage.getItem('yg_theme') || 'dark';
+    var savedTheme = localStorage.getItem('yg_theme') || 'light';
     if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
     } else {
@@ -17,6 +17,9 @@ function toggleTheme() {
     var isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('yg_theme', isDark ? 'dark' : 'light');
     updateThemeIcon();
+    if (window._explorerMap && window.setMapLayer && window._explorerCurrentMode) {
+        window.setMapLayer(window._explorerCurrentMode);
+    }
 }
 
 function updateThemeIcon() {
@@ -204,7 +207,6 @@ function viewHome() {
         '<div class="custom-brand-logo-tagline">Your India Travel Companion</div>' +
         '</div>' +
         '</div>' +
-
 
         '<!-- Hero Section -->' +
         '<div class="custom-home-hero">' +
@@ -615,7 +617,8 @@ function viewProfile() {
 // ── ABOUT VIEW ───────────────────────────────────────
 // ══════════════════════════════════════════════════════
 function viewAbout() {
-    return '<div class="ab-page">' +
+    return '<div class="view-section active">' +
+        '<div class="ab-page">' +
 
         '<!-- Hero Banner -->' +
         '<div class="ab-hero">' +
@@ -624,95 +627,203 @@ function viewAbout() {
         '<div class="ab-orb ab-orb-2"></div>' +
         '<div class="ab-orb ab-orb-3"></div>' +
         '</div>' +
-        '<div class="ab-hero-content scroll-reveal">' +
-        '<span class="ab-badge">✦ About Yatra Guide</span>' +
-        '<h1 class="ab-hero-title">Built for <span class="ab-gradient-text">Every</span><br>Indian Traveller</h1>' +
-        '<p class="ab-hero-sub">An offline-first travel companion that works even without the internet — giving every traveller in India the tools they deserve.</p>' +
+        '<div class="ab-hero-content">' +
+        '<span class="ab-badge">✦ The Yatra Guide Story</span>' +
+        '<h1 class="ab-hero-title">Engineering Seamless Journeys Across <span class="ab-gradient-text">India</span></h1>' +
+        '<p class="ab-hero-sub">An offline-first, privacy-focused travel intelligence platform calibrated specifically for Indian highways, railways, and flight corridors. Zero tracking, zero external map dependencies, 100% precision.</p>' +
         '<div class="ab-hero-stats">' +
-        '<div class="ab-stat-pill"><strong>15+</strong> Cities</div>' +
-        '<div class="ab-stat-pill"><strong>5</strong> Transport Modes</div>' +
-        '<div class="ab-stat-pill"><strong>100%</strong> Offline</div>' +
-        '<div class="ab-stat-pill"><strong>Zero</strong> Tracking</div>' +
+        '<div class="ab-stat-card">' +
+        '<span class="ab-stat-icon">🏛️</span>' +
+        '<div class="ab-stat-num">15+</div>' +
+        '<div class="ab-stat-lbl">Major City Hubs</div>' +
+        '</div>' +
+        '<div class="ab-stat-card">' +
+        '<span class="ab-stat-icon">🚆</span>' +
+        '<div class="ab-stat-num">5</div>' +
+        '<div class="ab-stat-lbl">Transport Modes</div>' +
+        '</div>' +
+        '<div class="ab-stat-card">' +
+        '<span class="ab-stat-icon">⚡</span>' +
+        '<div class="ab-stat-num">100%</div>' +
+        '<div class="ab-stat-lbl">Client-Side Offline</div>' +
+        '</div>' +
+        '<div class="ab-stat-card">' +
+        '<span class="ab-stat-icon">🛡️</span>' +
+        '<div class="ab-stat-num">0 KB</div>' +
+        '<div class="ab-stat-lbl">Telemetry or Ads</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="ab-hero-btns">' +
+        '<button class="ab-btn-primary" onclick="navigate(\'explorer\')">🗺️ Explore City Hubs</button>' +
+        '<button class="ab-btn-ghost" onclick="navigate(\'planner\')">⚡ Plan Route Now</button>' +
         '</div>' +
         '</div>' +
         '</div>' +
 
-        '<!-- Mission -->' +
-        '<section class="ab-section scroll-reveal">' +
-        '<div class="ab-section-inner ab-mission">' +
-        '<div class="ab-mission-text">' +
-        '<span class="ab-section-tag">🎯 Our Mission</span>' +
-        '<h2>Travel without boundaries,<br><em>plan without limits</em></h2>' +
-        '<p>Yatra Guide was born from a simple belief — powerful travel planning should never depend on a Wi-Fi signal. Using the <strong>Haversine formula</strong> and calibrated local cost models, we compute exact distances and multi-modal transport costs right inside your browser.</p>' +
-        '<p>From the snow-capped peaks of Manali to the sun-drenched shores of Goa, we want every journey to start with confidence.</p>' +
-        '</div>' +
-        '<div class="ab-mission-visual">' +
-        '<div class="ab-map-globe">' +
-        '<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="ab-globe-svg">' +
-        '<circle cx="100" cy="100" r="90" stroke="url(#g1)" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>' +
-        '<circle cx="100" cy="100" r="70" stroke="url(#g1)" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.4"/>' +
-        '<circle cx="100" cy="100" r="50" fill="url(#g2)" opacity="0.15"/>' +
-        '<path d="M100 20 L111 55 L148 55 L118 76 L129 111 L100 90 L71 111 L82 76 L52 55 L89 55 Z" fill="url(#g1)" opacity="0.9"/>' +
-        '<circle cx="100" cy="100" r="8" fill="#fff" opacity="0.9"/>' +
-        '<defs>' +
-        '<linearGradient id="g1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">' +
-        '<stop stop-color="#8B2613"/><stop offset="0.5" stop-color="#F97316"/><stop offset="1" stop-color="#F59E0B"/>' +
-        '</linearGradient>' +
-        '<radialGradient id="g2" cx="50%" cy="50%" r="50%">' +
-        '<stop stop-color="#F97316"/><stop offset="1" stop-color="#8B2613" stop-opacity="0"/>' +
-        '</radialGradient>' +
-        '</defs>' +
-        '</svg>' +
+        '<!-- 2-Column Philosophy & Math Engine -->' +
+        '<section class="ab-section">' +
+        '<div class="ab-story-grid">' +
+        '<div class="ab-story-text">' +
+        '<span class="ab-section-tag">🎯 Philosophy & Origins</span>' +
+        '<h2>Travel without boundaries,<br><em>plan without internet.</em></h2>' +
+        '<p>Yatra Guide was engineered to solve a fundamental Indian travel reality: network dead zones on expressways, ghats, and high-altitude passes. Most mapping solutions fail the second mobile signal drops.</p>' +
+        '<p>We brought spatial geometry directly to the browser. By embedding geodesy equations and calibrated transport models into lightweight JavaScript, Yatra Guide estimates distances, travel hours, and fuel costs instantly without sending a single byte to external servers.</p>' +
+        '<div class="ab-story-quote">"True travel confidence begins when your route, emergency contacts, and budget don\'t depend on 4G reception."</div>' +
+        '<div class="ab-story-tenets">' +
+        '<div class="ab-tenet-item"><span class="ab-tenet-icon">✓</span> 100% browser-computed Great-Circle arc distance</div>' +
+        '<div class="ab-tenet-item"><span class="ab-tenet-icon">✓</span> Calibrated Indian road curvature & mountain speed indices</div>' +
+        '<div class="ab-tenet-item"><span class="ab-tenet-icon">✓</span> Pre-cached offline emergency services for every city</div>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '</section>' +
 
-        '<!-- Feature Cards -->' +
-        '<section class="ab-section scroll-reveal">' +
+        '<!-- Architectural Bento Grid -->' +
+        '<section class="ab-section">' +
         '<div class="ab-section-header">' +
-        '<span class="ab-section-tag">✨ What We Offer</span>' +
-        '<h2>Everything you need, nothing you don\'t</h2>' +
+        '<span class="ab-section-tag">✨ Core Architecture</span>' +
+        '<h2>Engineered for Reliability</h2>' +
+        '<p>Every component in Yatra Guide is designed to operate friction-free without depending on third-party commercial APIs.</p>' +
         '</div>' +
-        '<div class="ab-features">' +
-        '<div class="ab-feat-card ab-feat-1"><div class="ab-feat-icon">🗺️</div><h3>Offline Route Planner</h3><p>Accurate Haversine-based distances between 15+ major cities — no internet needed, ever.</p><div class="ab-feat-bar"></div></div>' +
-        '<div class="ab-feat-card ab-feat-2"><div class="ab-feat-icon">💰</div><h3>Cost Estimator</h3><p>Compare Bike, Car, Bus, Train & Flight costs simultaneously with calibrated Indian averages.</p><div class="ab-feat-bar"></div></div>' +
-        '<div class="ab-feat-card ab-feat-3"><div class="ab-feat-icon">🧠</div><h3>AI Travel Assistant</h3><p>Ask anything about India travel — our Gemini-powered AI gives instant expert answers.</p><div class="ab-feat-bar"></div></div>' +
-        '<div class="ab-feat-card ab-feat-4"><div class="ab-feat-icon">🚨</div><h3>Emergency Directory</h3><p>Instant access to hospitals, police stations & helplines for every city — always ready.</p><div class="ab-feat-bar"></div></div>' +
-        '<div class="ab-feat-card ab-feat-5"><div class="ab-feat-icon">🌦️</div><h3>Weather Intelligence</h3><p>Seasonal travel scores and monsoon/winter predictions computed locally in your browser.</p><div class="ab-feat-bar"></div></div>' +
-        '<div class="ab-feat-card ab-feat-6"><div class="ab-feat-icon">🔒</div><h3>Privacy First</h3><p>All your routes, history and saved trips stay in your browser. Zero telemetry, zero ads.</p><div class="ab-feat-bar"></div></div>' +
+        '<div class="ab-bento-grid">' +
+        '<div class="ab-bento-card">' +
+        '<div class="ab-bento-icon">🗺️</div>' +
+        '<span class="ab-bento-pill">GEODESY ENGINE</span>' +
+        '<h3>Haversine Route Mathematics</h3>' +
+        '<p>Sub-millisecond spherical distance calculations between Indian coordinates. Uses customized detour factors that account for national highways and mountain topography.</p>' +
+        '</div>' +
+        '<div class="ab-bento-card">' +
+        '<div class="ab-bento-icon">💰</div>' +
+        '<span class="ab-bento-pill">CALIBRATED LOGISTICS</span>' +
+        '<h3>Multi-Modal Cost Forecaster</h3>' +
+        '<p>Simultaneous pricing models for Bike, Car, Bus, Train, and Flight. Calibrated with real-world Indian toll, fuel, and sleeper-class tariff indices.</p>' +
+        '</div>' +
+        '<div class="ab-bento-card">' +
+        '<div class="ab-bento-icon">🚨</div>' +
+        '<span class="ab-bento-pill">SAFETY FIRST</span>' +
+        '<h3>Offline Emergency Lifeline</h3>' +
+        '<p>Instant, zero-latency access to verified emergency room phone numbers, police stations, and women helplines across all covered states and union territories.</p>' +
+        '</div>' +
+        '<div class="ab-bento-card">' +
+        '<div class="ab-bento-icon">🧠</div>' +
+        '<span class="ab-bento-pill">HYBRID INTELLIGENCE</span>' +
+        '<h3>Smart Travel Hub</h3>' +
+        '<p>Combines rule-based packing calculators and seasonal weather curves with an optional Gemini-powered travel advisor for personalized recommendations.</p>' +
+        '</div>' +
         '</div>' +
         '</section>' +
 
         '<!-- How It Works Timeline -->' +
-        '<section class="ab-section scroll-reveal">' +
+        '<section class="ab-section">' +
         '<div class="ab-section-header">' +
-        '<span class="ab-section-tag">⚙️ How It Works</span>' +
-        '<h2>Smart tech, simple experience</h2>' +
+        '<span class="ab-section-tag">⚙️ Execution Workflow</span>' +
+        '<h2>How Yatra Guide Calculates Your Journey</h2>' +
         '</div>' +
         '<div class="ab-timeline">' +
-        '<div class="ab-tl-item"><div class="ab-tl-dot">1</div><div class="ab-tl-content"><h4>Pick Your Cities</h4><p>Select any two of 15+ Indian cities from our route planner dashboard.</p></div></div>' +
-        '<div class="ab-tl-item"><div class="ab-tl-dot">2</div><div class="ab-tl-content"><h4>Haversine Calculation</h4><p>We compute the great-circle distance using the Haversine formula — accurate to within 1%.</p></div></div>' +
-        '<div class="ab-tl-item"><div class="ab-tl-dot">3</div><div class="ab-tl-content"><h4>Multi-Mode Cost Breakdown</h4><p>Each transport mode applies its own cost-per-km and speed factor.</p></div></div>' +
-        '<div class="ab-tl-item"><div class="ab-tl-dot">4</div><div class="ab-tl-content"><h4>AI Score & Recommendation</h4><p>A composite travel score factors in weather, price trends, and travel time — all offline.</p></div></div>' +
+        '<div class="ab-tl-item">' +
+        '<div class="ab-tl-dot">1</div>' +
+        '<div class="ab-tl-content">' +
+        '<h4>Select Departure & Destination Hubs</h4>' +
+        '<p>Choose from our verified database of Indian cities or click directly on any destination marker across the interactive Explorer map.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="ab-tl-item">' +
+        '<div class="ab-tl-dot">2</div>' +
+        '<div class="ab-tl-content">' +
+        '<h4>Spherical Arc & Terrain Compensation</h4>' +
+        '<p>The geodesy engine computes Great-Circle distance and applies real-world highway transit curvature factors for accurate road mileage.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="ab-tl-item">' +
+        '<div class="ab-tl-dot">3</div>' +
+        '<div class="ab-tl-content">' +
+        '<h4>Parallel 5-Mode Pricing Synthesis</h4>' +
+        '<p>Algorithms evaluate speed caps, average fuel efficiency, typical toll expenditure, and train booking classes to provide realistic budget envelopes.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="ab-tl-item">' +
+        '<div class="ab-tl-dot">4</div>' +
+        '<div class="ab-tl-content">' +
+        '<h4>Save, Export & Journey Freely</h4>' +
+        '<p>Bookmark routes to your personal local profile or export them for offline review. Everything stays securely on your device.</p>' +
+        '</div>' +
+        '</div>' +
         '</div>' +
         '</section>' +
 
-        '<!-- Footer CTA -->' +
-        '<section class="ab-footer-cta scroll-reveal">' +
+        '<!-- Cultural Diversity Across India -->' +
+        '<section class="ab-section">' +
+        '<div class="ab-section-header">' +
+        '<span class="ab-section-tag">🇮🇳 Incredible India</span>' +
+        '<h2>Curated Across Four Distinct Belts</h2>' +
+        '<p>From snowbound alpine passes to tropical backwaters, our database captures the cultural uniqueness of each region.</p>' +
+        '</div>' +
+        '<div class="ab-culture-grid">' +
+        '<div class="ab-culture-card">' +
+        '<div class="ab-culture-icon">🏔️</div>' +
+        '<h4>Northern Himalayas</h4>' +
+        '<p>Manali, Shimla, Srinagar & Amritsar. Majestic peaks, high-altitude passes, and ancient shrines.</p>' +
+        '</div>' +
+        '<div class="ab-culture-card">' +
+        '<div class="ab-culture-icon">🕌</div>' +
+        '<h4>Golden West</h4>' +
+        '<p>Jaipur, Udaipur, Ahmedabad & Mumbai. Grand forts, royal heritage, textile havens, and desert nights.</p>' +
+        '</div>' +
+        '<div class="ab-culture-card">' +
+        '<div class="ab-culture-icon">🌴</div>' +
+        '<h4>Coastal South</h4>' +
+        '<p>Kochi, Goa, Bengaluru & Chennai. Serene backwaters, colonial cathedrals, spice hills, and tech corridors.</p>' +
+        '</div>' +
+        '<div class="ab-culture-card">' +
+        '<div class="ab-culture-icon">🏮</div>' +
+        '<h4>Eastern Heritage</h4>' +
+        '<p>Varanasi, Kolkata, Darjeeling & Puri. Sacred ghats, classical architecture, and misty tea plantations.</p>' +
+        '</div>' +
+        '</div>' +
+        '</section>' +
+
+        '<!-- FAQs Accordion -->' +
+        '<section class="ab-section">' +
+        '<div class="ab-section-header">' +
+        '<span class="ab-section-tag">💡 Clarifications</span>' +
+        '<h2>Frequently Asked Questions</h2>' +
+        '</div>' +
+        '<div class="ab-faqs-grid">' +
+        '<div class="ab-faq-item">' +
+        '<div class="ab-faq-q"><span>Does Yatra Guide work without an internet connection?</span><span class="ab-faq-toggle">+</span></div>' +
+        '<div class="ab-faq-a">Yes! All city coordinates, distance computations, multi-modal cost models, and emergency helpline directories are bundled directly into the web application. Once loaded in your browser cache, the entire core system operates 100% offline.</div>' +
+        '</div>' +
+        '<div class="ab-faq-item">' +
+        '<div class="ab-faq-q"><span>How accurate are the travel cost estimates?</span><span class="ab-faq-toggle">+</span></div>' +
+        '<div class="ab-faq-a">Our rates are calibrated against current Indian transport benchmarks: ₹2.5/km for two-wheelers, ₹6/km for standard hatchbacks/sedans (accounting for mileage and highway tolls), ₹1.8/km for AC express buses, and standard Indian Railways sleeper/3AC tariffs.</div>' +
+        '</div>' +
+        '<div class="ab-faq-item">' +
+        '<div class="ab-faq-q"><span>Is my personal data or search history tracked?</span><span class="ab-faq-toggle">+</span></div>' +
+        '<div class="ab-faq-a">Never. We do not use third-party analytics trackers, tracking cookies, or commercial user profiling. Your saved trips and route history are stored strictly in your browser\'s private localStorage.</div>' +
+        '</div>' +
+        '<div class="ab-faq-item">' +
+        '<div class="ab-faq-q"><span>What algorithm powers the route distance calculations?</span><span class="ab-faq-toggle">+</span></div>' +
+        '<div class="ab-faq-a">We implement the Haversine trigonometric formula based on Earth\'s mean radius (6,371 km), adjusted with calibrated Indian road curvature coefficients (averaging 1.18x - 1.25x for actual highway driving distances).</div>' +
+        '</div>' +
+        '</div>' +
+        '</section>' +
+
+        '<!-- Grand Footer CTA -->' +
+        '<section class="ab-footer-cta">' +
         '<div class="ab-cta-inner">' +
         '<div class="ab-cta-orb"></div>' +
-        '<span class="ab-section-tag">🇮🇳 Made for India</span>' +
-        '<h2>Built with <span class="ab-heart">❤️</span> for every traveller</h2>' +
-        '<p>No external APIs. No tracking. Everything runs in your browser.<br>Open source, forever free.</p>' +
+        '<span class="ab-section-tag">🇮🇳 Proudly Open & Free</span>' +
+        '<h2>Built with <span class="ab-heart">❤️</span> for Indian Travellers</h2>' +
+        '<p>No hidden paywalls. No external tracking. Everything executes locally in your browser for unbeatable speed and resilience.</p>' +
         '<div class="ab-cta-btns">' +
-        '<button class="ab-cta-btn-primary" onclick="navigate(\'explorer\')">Explore Cities</button>' +
-        '<button class="ab-cta-btn-ghost" onclick="navigate(\'planner\')">Plan a Trip</button>' +
+        '<button class="ab-cta-btn-primary" onclick="navigate(\'planner\')">⚡ Plan Your Next Journey</button>' +
+        '<button class="ab-cta-btn-ghost" onclick="navigate(\'explorer\')">🗺️ Interactive Explorer</button>' +
         '</div>' +
-        '<p class="ab-copy">© 2026 Yatra Guide</p>' +
+        '<p class="ab-copy">© 2026 Yatra Guide &bull; Made with pride for Bharat</p>' +
         '</div>' +
         '</section>' +
 
+        '</div>' +
         '</div>';
 }
 
@@ -1407,19 +1518,21 @@ function setupHome() {
 
 function setupAbout() {
     var reveals = document.querySelectorAll('.scroll-reveal');
-    if (typeof IntersectionObserver !== 'undefined' && reveals.length > 0) {
-        var obs = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    obs.unobserve(entry.target);
-                }
+    reveals.forEach(function(el) { el.classList.add('visible'); });
+
+    // FAQ Accordion Toggle
+    var faqItems = document.querySelectorAll('.ab-faq-item');
+    faqItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            var isActive = item.classList.contains('active');
+            faqItems.forEach(function(other) {
+                other.classList.remove('active');
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-        reveals.forEach(function(el) { obs.observe(el); });
-    } else {
-        reveals.forEach(function(el) { el.classList.add('visible'); });
-    }
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
 }
 
 function setupPlanner() {
@@ -1588,28 +1701,28 @@ function setupExplorer(params) {
     var mapEl = document.getElementById('leafletMap');
     if (!mapEl) return;
 
-    // Tile layer definitions
+    // Tile layer definitions (100% free, no API key required)
     var tileLayers = {
         street: {
-            dark:  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-            light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            attr:  '\u00a9 OpenStreetMap contributors \u00a9 CARTO',
-            subdomains: 'abcd'
+            light: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            dark:  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            lightAttr: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+            darkAttr: '&copy; <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>',
+            subdomains: 'abc'
         },
         satellite: {
             url:  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            attr: '\u00a9 Esri, Maxar, Earthstar Geographics'
+            attr: '&copy; Esri, Maxar, Earthstar Geographics'
         },
         terrain: {
             // Esri World Topo — same CDN as satellite, very fast global delivery
             url:  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-            attr: '\u00a9 Esri, HERE, Garmin, FAO, NOAA, USGS'
+            attr: '&copy; Esri, HERE, Garmin, FAO, NOAA, USGS'
         }
     };
 
     // Wait slightly for DOM to settle
     setTimeout(function() {
-        var isDark = document.documentElement.classList.contains('dark');
         var currentLayer = null;
         var map = L.map('leafletMap', {
             center: [22.5, 79],
@@ -1624,6 +1737,7 @@ function setupExplorer(params) {
         // Expose setMapLayer globally so onclick buttons can call it
         window._explorerMap = map;
         window._explorerCurrentLayer = null;
+        window._explorerCurrentMode = 'street';
 
         // Shared tile options for fast loading
         var fastTileOpts = {
@@ -1636,6 +1750,7 @@ function setupExplorer(params) {
         };
 
         function applyLayer(mode) {
+            window._explorerCurrentMode = mode || 'street';
             if (window._explorerCurrentLayer) {
                 map.removeLayer(window._explorerCurrentLayer);
             }
@@ -1649,12 +1764,19 @@ function setupExplorer(params) {
                 attr = tileLayers.terrain.attr;
                 opts = Object.assign({}, fastTileOpts, { attribution: attr });
             } else {
-                url  = isDark ? tileLayers.street.dark : tileLayers.street.light;
-                attr = tileLayers.street.attr;
-                opts = Object.assign({}, fastTileOpts, {
-                    attribution: attr,
-                    subdomains: tileLayers.street.subdomains
-                });
+                var isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
+                    url  = tileLayers.street.dark;
+                    attr = tileLayers.street.darkAttr;
+                    opts = Object.assign({}, fastTileOpts, { attribution: attr });
+                } else {
+                    url  = tileLayers.street.light;
+                    attr = tileLayers.street.lightAttr;
+                    opts = Object.assign({}, fastTileOpts, {
+                        attribution: attr,
+                        subdomains: tileLayers.street.subdomains
+                    });
+                }
             }
             window._explorerCurrentLayer = L.tileLayer(url, opts).addTo(map);
 
@@ -1969,12 +2091,11 @@ function setupAuth(mode) {
 // ── INIT ─────────────────────────────────────────────
 // ══════════════════════════════════════════════════════
 function init() {
-    document.body.classList.add('first-load');
     setTimeout(function() {
         var splash = document.getElementById('splash-screen');
         if (splash) splash.remove();
         document.body.classList.remove('first-load');
-    }, 3500);
+    }, 2100);
 
     document.querySelectorAll('.nav-center a').forEach(function (a) {
         a.addEventListener('click', function (e) {
